@@ -13,6 +13,7 @@ __pycache__/
 
 # VS Code
 .vscode/
-
+diagrama-casos-uso.mermaid
+diagrama-classes.mermaid
 # Alembic
 alembic.ini

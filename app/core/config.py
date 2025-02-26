@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v10"
     SECRET_KEY: str
      # Configurações do banco de dados
-    DATABASE_URL : str = "postgresql://postgres:admin123@localhost:5432/mechanical_workshop"
+    DATABASE_URL : str 
 
 # Carrega variáveis de ambiente do arquivo .env
     class Config:
