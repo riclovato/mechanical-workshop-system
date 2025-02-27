@@ -13,4 +13,5 @@ class Vehicle(Base):
     customer_id = Column(Integer, ForeignKey("customers.id"))
 
     owner =  relationship("Customer", back_populates="vehicles")
+    service_orders = relationship("ServiceOrder", back_populates="vehicle")
 
