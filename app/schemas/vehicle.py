@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional,List
+from .customer import CustomerBase
+from .service_order import ServiceOrderBase
 
 class VehicleBase(BaseModel):
     
@@ -29,6 +31,13 @@ class VehicleUpdate(BaseModel):
     model: Optional[str] = None
     year: Optional[int] = None
     customer_id: Optional[int] = None
+
+class VehicleResponse(VehicleBase):
+    owner: CustomerBase
+    service_orders: List[ServiceOrderBase]
+
+    class Config:
+        from_attribute = True
 
 
 if __name__ == "__main__":

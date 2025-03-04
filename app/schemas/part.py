@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
+from .service_item import ServiceItemBase
 
 class PartBase(BaseModel):
    
@@ -28,6 +29,13 @@ class PartUpdate(BaseModel):
     stock_quantity: Optional[int] = None
     cost_price: Optional[float] = None
     selling_price: Optional[float] = None
+
+class PartResponse(PartBase):
+    
+    service_items: List[ServiceItemBase]
+
+    class Config:
+        from_attribute = True
 
 
 if __name__ == "__main__":

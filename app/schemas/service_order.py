@@ -1,6 +1,9 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
+from .vehicle import VehicleBase
+from .mechanic import MechanicBase
+from .service_item import ServiceItemBase
 
 class ServiceOrderBase(BaseModel):
 
@@ -28,6 +31,15 @@ class ServiceOrderUpdate(BaseModel):
     entry_date: Optional[datetime] = None
     completion_date: Optional[datetime] = None
     total_value: Optional[float] = None
+
+class ServiceOrderResponse(ServiceOrderBase):
+
+    vehicle : VehicleBase
+    mechanic: MechanicBase
+    service_items: List[ServiceItemBase]
+
+    class Config:
+        from_attribute = True
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
+from .vehicle import VehicleBase
 
 #Schema base para Customer (usado para leitura)
 class CustomerBase(BaseModel):
@@ -32,6 +33,11 @@ class CustomerUpdate(BaseModel):
     phone: Optional[str] = None
     address: Optional[str] = None
 
+class CustomerResponse(CustomerBase):  # Herda de CustomerBase
+    vehicles: List[VehicleBase] # Adiciona a lista de veículos
+        
+    class Config:
+        from_attibutes = True
 
 # Testando os schemas
 if __name__ == "__main__":
