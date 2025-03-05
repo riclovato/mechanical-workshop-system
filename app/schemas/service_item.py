@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
+from .service_order import ServiceOrderBase
+from .part import PartBase
 
 class ServiceItemBase(BaseModel):
 
@@ -29,6 +31,13 @@ class ServiceItemUpdate(BaseModel):
     unit_value: Optional[float] = None
     description: Optional[str] = None
 
+class ServiceItemResponse(ServiceItemBase):
+
+    service_order: ServiceOrderBase
+    part: PartBase
+
+    class Config:
+        from_attribute = True
 
 if __name__ == "__main__":
     # Dados para criação de um ServiceItem

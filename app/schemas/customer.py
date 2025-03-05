@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional, List
 from .vehicle import VehicleBase
+from validator import validate_cpf, validate_email, validate_phone
 
 #Schema base para Customer (usado para leitura)
 class CustomerBase(BaseModel):
@@ -11,6 +12,25 @@ class CustomerBase(BaseModel):
     email: Optional[EmailStr] = None
     phone: Optional[str] = None
     address: Optional[str] = None
+
+    @field_validator("cpf")
+    def validate_cpf_field(cls, value: str) -> str:
+        if not validate_cpf(value):
+            raise ValueError("CPF inválido.")
+        return value
+    
+    @field_validator("email")
+    def validate_email_field(cls, value: EmailStr) -> EmailStr:
+        if not validate_email(value):
+            raise ValueError("Email Inválido.")
+        return value
+    
+    @field_validator("phone")
+    def validate_phone_field(cls, value: str) -> str:
+        if not validate_phone(value):
+            raise ValueError("Número Inválido.")
+        return value
+
 
     class Config:
         from_attributes = True # Habilita a compatibilidade com ORM (SQLAlchemy)

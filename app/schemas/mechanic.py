@@ -1,5 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional
+from validator import validate_phone
 
 class MechanicBase(BaseModel):
 
@@ -8,6 +9,12 @@ class MechanicBase(BaseModel):
     specialty: str
     phone: str
     available: bool
+
+    @field_validator("phone")
+    def validate_phone_field(cls, value: str) -> str:
+        if not validate_phone(value):
+            raise ValueError("Número Inválido.")
+        return value
 
     class Config:
         from_attributes = True

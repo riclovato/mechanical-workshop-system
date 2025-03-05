@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional,List
 from .customer import CustomerBase
 from .service_order import ServiceOrderBase
-
+from validator import validate_license_plate
 class VehicleBase(BaseModel):
     
     id: int
@@ -11,6 +11,12 @@ class VehicleBase(BaseModel):
     model: str
     year: int
     customer_id: int
+    
+    @field_validator("license_plate")
+    def license_plate_validator_field(cls, value: str) -> str:
+        if not validate_license_plate(value):
+            raise ValueError("Placa Inválida.")
+        return value
 
     class Config:
         from_attributes = True
