@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+mechanical_workshop_system.egg-info/PKG-INFO
+mechanical_workshop_system.egg-info/SOURCES.txt
+mechanical_workshop_system.egg-info/dependency_links.txt
+mechanical_workshop_system.egg-info/top_level.txt
+src/alembic/env.py
+src/app/__init__.py
+tests/test_crud_customer.py

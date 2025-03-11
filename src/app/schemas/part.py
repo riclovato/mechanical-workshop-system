@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from __future__ import annotations
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from .service_item import ServiceItemBase
 
@@ -11,8 +12,7 @@ class PartBase(BaseModel):
     cost_price: float
     selling_price: float
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class PartCreate(BaseModel):
     
@@ -34,8 +34,7 @@ class PartResponse(PartBase):
     
     service_items: List[ServiceItemBase]
 
-    class Config:
-        from_attribute = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 if __name__ == "__main__":

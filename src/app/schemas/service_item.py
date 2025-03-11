@@ -1,7 +1,11 @@
-from pydantic import BaseModel
-from typing import Optional
-from .service_order import ServiceOrderBase
-from .part import PartBase
+from __future__ import annotations
+from pydantic import BaseModel, ConfigDict
+from typing import Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .service_order import ServiceOrderBase  # Importação condicional
+    from .part import PartBase  # Importação condicional
+
 
 class ServiceItemBase(BaseModel):
 
@@ -12,8 +16,7 @@ class ServiceItemBase(BaseModel):
     unit_value: float
     description: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ServiceItemCreate(BaseModel):
 
@@ -33,11 +36,10 @@ class ServiceItemUpdate(BaseModel):
 
 class ServiceItemResponse(ServiceItemBase):
 
-    service_order: ServiceOrderBase
-    part: PartBase
+    service_order: "ServiceOrderBase"
+    part: "PartBase"
 
-    class Config:
-        from_attribute = True
+    model_config = ConfigDict(from_attributes=True)
 
 if __name__ == "__main__":
     # Dados para criação de um ServiceItem

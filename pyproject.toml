@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app", "alembic"]
+package-dir = {"app" = "src/app", "alembic" = "src/alembic"}
+
+[project]
+name = "mechanical-workshop-system"
+version = "0.1"
+description = "Sistema de Gerenciamento de Oficina Mecânica"
+authors = [{name = "Seu Nome", email = "seu@email.com"}]
+requires-python = ">=3.8"
+license = {text = "MIT"}

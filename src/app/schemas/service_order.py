@@ -1,9 +1,11 @@
-from pydantic import BaseModel
-from typing import Optional, List
+from __future__ import annotations
+from pydantic import BaseModel, ConfigDict
+from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime
-from .vehicle import VehicleBase
-from .mechanic import MechanicBase
-from .service_item import ServiceItemBase
+
+if TYPE_CHECKING:
+    from .service_item import ServiceItemBase
+    from .mechanic import MechanicBase
 
 class ServiceOrderBase(BaseModel):
 
@@ -14,8 +16,7 @@ class ServiceOrderBase(BaseModel):
     completion_date: Optional[datetime] = None
     total_value: float
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ServiceOrderCreate(BaseModel):
 
@@ -34,12 +35,11 @@ class ServiceOrderUpdate(BaseModel):
 
 class ServiceOrderResponse(ServiceOrderBase):
 
-    vehicle : VehicleBase
-    mechanic: MechanicBase
-    service_items: List[ServiceItemBase]
+    vehicle : "VehicleBase"
+    mechanic: "MechanicBase"
+    service_items: List["ServiceItemBase"]
 
-    class Config:
-        from_attribute = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 if __name__ == "__main__":

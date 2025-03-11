@@ -1,0 +1,7 @@
+Metadata-Version: 2.2
+Name: mechanical-workshop-system
+Version: 0.1
+Summary: Sistema de Gerenciamento de Oficina Mecânica
+Author-email: Seu Nome <seu@email.com>
+License: MIT
+Requires-Python: >=3.8

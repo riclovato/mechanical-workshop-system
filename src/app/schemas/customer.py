@@ -1,7 +1,9 @@
-from pydantic import BaseModel, EmailStr, field_validator
-from typing import Optional, List
-from .vehicle import VehicleBase
-from validator import validate_cpf, validate_email, validate_phone
+from __future__ import annotations
+from pydantic import BaseModel, EmailStr, field_validator, ConfigDict
+from typing import Optional, List, TYPE_CHECKING
+from .custom_validator import validate_cpf, validate_email, validate_phone  # Importação relativa
+if TYPE_CHECKING:
+    from .vehicle import VehicleBase  # Importação apenas para type checking
 
 #Schema base para Customer (usado para leitura)
 class CustomerBase(BaseModel):
@@ -32,8 +34,9 @@ class CustomerBase(BaseModel):
         return value
 
 
-    class Config:
-        from_attributes = True # Habilita a compatibilidade com ORM (SQLAlchemy)
+    model_config = ConfigDict(from_attributes=True)
+        
+
 
 #Schema para criação de um Customer
 class CustomerCreate(BaseModel):
@@ -54,10 +57,9 @@ class CustomerUpdate(BaseModel):
     address: Optional[str] = None
 
 class CustomerResponse(CustomerBase):  # Herda de CustomerBase
-    vehicles: List[VehicleBase] # Adiciona a lista de veículos
+    vehicles: List["VehicleBase"] # Adiciona a lista de veículos
         
-    class Config:
-        from_attibutes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Testando os schemas
 if __name__ == "__main__":

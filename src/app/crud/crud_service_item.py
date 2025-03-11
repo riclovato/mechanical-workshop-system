@@ -3,9 +3,10 @@ from app.models.service_item import ServiceItem
 from app.models.service_order import ServiceOrder
 from app.models.part import Part
 from app.crud.crud_base import CRUDBase
+from app.schemas.service_item import ServiceItemCreate, ServiceItemUpdate
 from typing import Optional
 
-class CRUDServiceItem(CRUDBase[ServiceItem]):
+class CRUDServiceItem(CRUDBase[ServiceItem, ServiceItemCreate, ServiceItemUpdate]):
 
     def add_item_to_order(self, db: Session, service_order_id: int,
                           part_id: int, quantity: int, unit_value: float,

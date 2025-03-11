@@ -1,6 +1,7 @@
-from pydantic import BaseModel, field_validator
+from __future__ import annotations
+from pydantic import BaseModel, field_validator, ConfigDict
 from typing import Optional
-from validator import validate_phone
+from .custom_validator import validate_phone
 
 class MechanicBase(BaseModel):
 
@@ -16,8 +17,7 @@ class MechanicBase(BaseModel):
             raise ValueError("Número Inválido.")
         return value
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class MechanicCreate(BaseModel):
     

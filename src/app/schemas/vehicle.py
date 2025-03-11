@@ -1,8 +1,10 @@
-from pydantic import BaseModel, field_validator
-from typing import Optional,List
-from .customer import CustomerBase
-from .service_order import ServiceOrderBase
-from validator import validate_license_plate
+from __future__ import annotations
+from pydantic import BaseModel, field_validator, ConfigDict
+from typing import Optional,List, TYPE_CHECKING
+from .custom_validator import validate_license_plate
+if TYPE_CHECKING:
+    from .customer import CustomerBase  # Importação apenas para type checking
+
 class VehicleBase(BaseModel):
     
     id: int
@@ -18,8 +20,7 @@ class VehicleBase(BaseModel):
             raise ValueError("Placa Inválida.")
         return value
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class VehicleCreate(BaseModel):
@@ -39,11 +40,10 @@ class VehicleUpdate(BaseModel):
     customer_id: Optional[int] = None
 
 class VehicleResponse(VehicleBase):
-    owner: CustomerBase
+    owner: "CustomerBase"
     service_orders: List[ServiceOrderBase]
 
-    class Config:
-        from_attribute = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 if __name__ == "__main__":

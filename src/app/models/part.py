@@ -12,4 +12,4 @@ class Part(Base):
     cost_price =  Column(Float, nullable=False)
     selling_price = Column(Float, nullable=False)
 
-    service_items = relationship("ServiceItem", back_populates="parts")
+    service_items = relationship("ServiceItem", back_populates="part")

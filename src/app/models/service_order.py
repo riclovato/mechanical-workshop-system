@@ -8,7 +8,7 @@ from sqlalchemy import Enum
 class ServiceOrderStatus(PyEnum):
     PENINDG = "pending"
     IN_PROGRESS = "in_progress"
-    COMPLETED = "completes"
+    COMPLETED = "completed"
     CANCELLED = "cancelled"
 
 class ServiceOrder(Base):

@@ -17,3 +17,6 @@ diagrama-casos-uso.mermaid
 diagrama-classes.mermaid
 # Alembic
 alembic.ini
+
+#Tests
+.config_test.py
