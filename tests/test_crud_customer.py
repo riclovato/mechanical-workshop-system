@@ -79,3 +79,5 @@ def test_get_by_cpf(db_session: Session):
     non_existent_customer = crud.get_by_cpf(db_session, cpf = "01234567890124")
 
     assert non_existent_customer is None
+
+
