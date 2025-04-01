@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.api import router as v1_router
 from app.api.v1.endpoints.customer import router as customer_router
+from app.api.v1.endpoints.vehicle import router as vehicle_router
 from app.db.session import engine
 from app.db.base import Base
 
@@ -24,6 +25,7 @@ Base.metadata.create_all(bind=engine) # Cria tabelas (apenas para desenvolviment
 app = FastAPI(title = "Oficina Mecânica")
 app.include_router(v1_router)
 app.include_router(customer_router, prefix="/api/v1")
+app.include_router(vehicle_router, prefix="/api/v1")
 
 #Cors
 app.add_middleware(

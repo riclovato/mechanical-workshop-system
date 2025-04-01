@@ -12,9 +12,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 # Importe a Base DEPOIS de ajustar o sys.path
 from app.db.base import Base  # noqa
+from app.models.customer import Customer
+from app.models.mechanic import Mechanic
+from app.models.part import Part
+from app.models.service_item import ServiceItem
+from app.models.service_order import ServiceOrder
+from app.models.vehicle import Vehicle
 
-# Remova os imports diretos dos modelos. Eles devem ser importados através da Base
-# Deixe o Alembic detectar automaticamente através dos metadados
+
 
 # Configuração do Alembic
 config = context.config

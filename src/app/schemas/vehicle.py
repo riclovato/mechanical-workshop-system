@@ -2,8 +2,9 @@ from __future__ import annotations
 from pydantic import BaseModel, field_validator, ConfigDict
 from typing import Optional,List, TYPE_CHECKING
 from .custom_validator import validate_license_plate
-if TYPE_CHECKING:
-    from .customer import CustomerBase  # Importação apenas para type checking
+
+from .customer import CustomerBase  
+from .service_order import ServiceOrderBase
 
 class VehicleBase(BaseModel):
     
@@ -41,10 +42,10 @@ class VehicleUpdate(BaseModel):
 
 class VehicleResponse(VehicleBase):
     owner: "CustomerBase"
-    service_orders: List[ServiceOrderBase]
+    service_orders: List["ServiceOrderBase"]
 
-    model_config = ConfigDict(from_attributes=True)
-
+    class Config:
+        from_attributes = True 
 
 if __name__ == "__main__":
     # Dados para criação de um Vehicle

@@ -6,7 +6,7 @@ from enum import Enum as PyEnum
 from sqlalchemy import Enum
 
 class ServiceOrderStatus(PyEnum):
-    PENINDG = "pending"
+    PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
     CANCELLED = "cancelled"
@@ -17,7 +17,7 @@ class ServiceOrder(Base):
     id = Column(Integer, primary_key=True, index=True)
     vehicle_id = Column(Integer, ForeignKey("vehicles.id"), nullable=False)
     mechanic_id = Column(Integer, ForeignKey("mechanics.id"), nullable=False)
-    status = Column(Enum(ServiceOrderStatus), default = ServiceOrderStatus.PENINDG)
+    status = Column(Enum(ServiceOrderStatus), default = ServiceOrderStatus.PENDING)
     entry_date = Column (DateTime)
     completion_date = Column(DateTime)
     total_value = Column (Float, default=0.0)

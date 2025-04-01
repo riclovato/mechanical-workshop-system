@@ -24,7 +24,7 @@ class CustomerBase(BaseModel):
     
     @field_validator("email")
     def validate_email(cls, v):
-        if "@example.com" not in v:  # Exemplo de validação específica
+        if "@example.com" not in v:  
             raise ValueError("Email deve pertencer ao domínio example.com")
         return v
     
