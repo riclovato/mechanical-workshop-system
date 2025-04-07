@@ -34,4 +34,5 @@ def delete_part(part_id: int, db: Session = Depends(get_db)):
     db_part = crud_part.get(db, part_id)
     if not db_part:
         raise HTTPException(status_code=404, detail="Part not found")
-    return crud_part.remove(db, id=part_id)
+    crud_part.remove(db, id=part_id)
+    return None
