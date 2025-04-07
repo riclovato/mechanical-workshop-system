@@ -1,8 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel, ConfigDict
 from typing import Optional, TYPE_CHECKING
-from .service_order import ServiceOrderSimple  
-from .part import PartSimple  
+
 
 if TYPE_CHECKING:
     from .service_order import ServiceOrderSimple  
@@ -41,7 +40,7 @@ class ServiceItemSimple(BaseModel):
     quantity: int
     unit_value: float
     description: str
-    part_id: int
+
 
 
 class ServiceItemResponse(ServiceItemBase):
@@ -49,5 +48,10 @@ class ServiceItemResponse(ServiceItemBase):
     service_order: "ServiceOrderSimple"
     part: "PartSimple"
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True,
+        populate_by_name=True,
+        json_schema_extra={
+            "exclude": {"service_order": {"__all__": {"service_items"}},
+                        "part": {"__all__": {"service_items"}}}
+        })
 

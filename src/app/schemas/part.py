@@ -47,9 +47,13 @@ class PartSimple(BaseModel):
 
 class PartResponse(PartBase):
     
-    service_items: List[ServiceItemSimple]
+    service_items: List["ServiceItemSimple"] = []
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True,
+        populate_by_name=True,
+        json_schema_extra={
+            "exclude": {"service_items": {"__all__": {"part"}}}
+        })
 
 
 
