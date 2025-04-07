@@ -5,6 +5,9 @@ from app.schemas.service_order import ServiceOrderCreate, ServiceOrderUpdate
 from typing import Optional
 
 class CRUDServiceOrder(CRUDBase[ServiceOrder, ServiceOrderCreate, ServiceOrderUpdate]):
+    def __init__(self):  
+        super().__init__(model=ServiceOrder) 
+
 
     def update_status(self, db: Session, service_order_id: int, new_status: str) -> Optional[ServiceOrder]:
         allowed_statuses = {"pending", "in_progress", "completed", "cancelled"}

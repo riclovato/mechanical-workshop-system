@@ -1,10 +1,14 @@
 from __future__ import annotations
-from pydantic import BaseModel, field_validator, ConfigDict
-from typing import Optional
-from .custom_validator import validate_phone
+from pydantic import field_validator,ConfigDict  
+from .base import BaseSchema
+from typing import List
+from app.schemas.custom_validator import validate_phone
+from typing import TYPE_CHECKING
+  
+if TYPE_CHECKING:
+    from .service_order import ServiceOrderSimple
 
-class MechanicBase(BaseModel):
-
+class MechanicBase(BaseSchema):
     id: int
     name: str
     specialty: str
@@ -13,46 +17,37 @@ class MechanicBase(BaseModel):
 
     @field_validator("phone")
     def validate_phone_field(cls, value: str) -> str:
-        if not validate_phone(value):
+        normalized = validate_phone(value)
+        if not normalized:
             raise ValueError("Número Inválido.")
-        return value
+        return normalized
 
-    model_config = ConfigDict(from_attributes=True)
-
-class MechanicCreate(BaseModel):
-    
+class MechanicCreate(BaseSchema):
     name: str
     specialty: str
     phone: str
     available: bool
 
-class MechanicUpdate(BaseModel):
+class MechanicUpdate(BaseSchema):
+    name: str | None = None
+    specialty: str | None = None
+    phone: str | None = None
+    available: bool | None = None
 
-    name: Optional[str] = None
-    specialty: Optional[str] = None
-    phone: Optional[str] = None
-    available: Optional[bool] = None
+class MechanicSimple(BaseSchema):
+    id: int
+    name: str
+    specialty: str
 
 
-if __name__ == "__main__":
-    # Dados para criação de um Mechanic
-    mechanic_data = {
-        "name": "João Silva",
-        "specialty": "Motor",
-        "phone": "(11) 99999-9999",
-        "available": True
-    }
-
-    # Criando um objeto MechanicCreate
-    mechanic_create = MechanicCreate(**mechanic_data)
-    print("MechanicCreate:", mechanic_create)
-
-    # Dados para atualização de um Mechanic
-    update_data = {
-        "specialty": "Suspensão",
-        "available": False
-    }
-
-    # Criando um objeto MechanicUpdate
-    mechanic_update = MechanicUpdate(**update_data)
-    print("MechanicUpdate:", mechanic_update)
+class MechanicResponse(MechanicBase):
+    service_orders: List["ServiceOrderSimple"] = []
+    
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        json_schema_extra={
+            "exclude": {"service_orders": {"__all__": {"mechanic"}}}
+        }
+   
+    )

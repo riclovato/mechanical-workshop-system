@@ -1,13 +1,15 @@
 from __future__ import annotations
-from pydantic import BaseModel, EmailStr, field_validator, ConfigDict
+from .base import BaseSchema
+from pydantic import EmailStr, field_validator, ConfigDict
 from typing import Optional, List, TYPE_CHECKING
-from .custom_validator import validate_cpf, validate_email, validate_phone  # Importação relativa
+
 if TYPE_CHECKING:
-    from .vehicle import VehicleBase  # Importação apenas para type checking
+    from .vehicle import VehicleSimple 
 import re
 
-#Schema base para Customer (usado para leitura)
-class CustomerBase(BaseModel):
+
+# Base schema for Customer data with common fields and validations.
+class CustomerBase(BaseSchema):
    
     id: int
     name: str
@@ -15,33 +17,36 @@ class CustomerBase(BaseModel):
     email: Optional[EmailStr] = None
     phone: Optional[str] = None
     address: Optional[str] = None
-
+    
+    
+    # Validates phone format (e.g., (11) 98888-8888 or 11 988888888).
     @field_validator("cpf")
     def validate_cpf(cls, v):
         if not re.match(r"^\d{3}\.\d{3}\.\d{3}-\d{2}$", v):
             raise ValueError("Formato de CPF inválido. Use XXX.XXX.XXX-XX")
         return v
-    
+    # Ensures email belongs to @example.com domain.
     @field_validator("email")
     def validate_email(cls, v):
         if "@example.com" not in v:  
             raise ValueError("Email deve pertencer ao domínio example.com")
         return v
     
+
+    # Validates phone format (e.g., (11) 98888-8888 or 11 988888888).
     @field_validator("phone")
     def validate_phone(cls, v):
-        # Aceita formatos como (11) 98888-8888 ou 11 988888888
         if not re.match(r"^\(\d{2}\) \d{5}-\d{4}$", v):
             raise ValueError("Formato inválido. Use (XX) XXXXX-XXXX")
         return v
 
-
+    # Enable ORM mode to allow loading from database models
     model_config = ConfigDict(from_attributes=True)
         
 
 
-#Schema para criação de um Customer
-class CustomerCreate(BaseModel):
+# Schema for creating a new Customer (excludes auto-generated fields like 'id')
+class CustomerCreate(BaseSchema):
     
     name: str
     cpf: str
@@ -49,8 +54,8 @@ class CustomerCreate(BaseModel):
     phone: Optional[str] = None
     address: Optional[str] = None
 
-#Schema para atualização de um Customer
-class CustomerUpdate(BaseModel):
+# Schema for updating Customer fields (all fields optional)
+class CustomerUpdate(BaseSchema):
 
     name: Optional[str] = None
     cpf: Optional[str] = None
@@ -58,29 +63,22 @@ class CustomerUpdate(BaseModel):
     phone: Optional[str] = None
     address: Optional[str] = None
 
-class CustomerResponse(CustomerBase):
+# Simplified schema for customer to avoid circular references
+# This is used in the Vehicle and ServiceOrder schemas to avoid circular references specifically
+class CustomerSimple(BaseSchema):
     id: int
+    name: str
+    cpf: str
 
-    class Config:
-        from_attributes = True
+class CustomerResponse(CustomerBase):
+    vehicles: List["VehicleSimple"] = []    # List of simplified Vehicle objects
+    
+    # Configuration to exclude sensitive/irrelevant fields from nested Vehicle objects
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        json_schema_extra={
+            "exclude": {"vehicles": {"__all__": {"owner", "service_orders"}}}
+        }
+    )
 
-# Testando os schemas
-if __name__ == "__main__":
-    customer_data = {
-        "name": "João Silva",
-        "cpf" : "123.456.789-00",
-        "email": "joao.silva@example.com",
-        "phone": "(11)99999-9999",
-        "address": "Rua Exemplo, 123"
-    }
-
-    customer_create = CustomerCreate(**customer_data)
-    print("CustomerCreate:", customer_create)
-
-    update_data = {
-        "phone": "(11) 88888-8888",
-        "email": "joao.novo@example.com"
-    }
-
-    customer_update = CustomerUpdate(**update_data)
-    print("CustomerUpdate:", customer_update)

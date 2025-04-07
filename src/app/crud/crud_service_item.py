@@ -7,6 +7,9 @@ from app.schemas.service_item import ServiceItemCreate, ServiceItemUpdate
 from typing import Optional
 
 class CRUDServiceItem(CRUDBase[ServiceItem, ServiceItemCreate, ServiceItemUpdate]):
+    def __init__(self):  
+        super().__init__(model=ServiceItem) 
+
 
     def add_item_to_order(self, db: Session, service_order_id: int,
                           part_id: int, quantity: int, unit_value: float,

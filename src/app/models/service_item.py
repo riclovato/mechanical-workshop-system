@@ -12,6 +12,6 @@ class ServiceItem(Base):
     unit_value = Column(Float, default=0.0)
     description = Column(String)
 
-    service_order = relationship("ServiceOrder", back_populates="items")
-    part = relationship("Part", back_populates="service_items")
+    service_order = relationship("ServiceOrder", back_populates="items", lazy="select")
+    part = relationship("Part", back_populates="service_items", lazy="select")
 

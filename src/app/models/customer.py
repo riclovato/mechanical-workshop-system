@@ -12,4 +12,4 @@ class Customer(Base):
     email = Column(String, unique=True)
     address = Column(String)
 
-    vehicles = relationship("Vehicle", back_populates="owner")
+    vehicles = relationship("Vehicle", back_populates="owner", lazy="select")

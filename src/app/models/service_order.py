@@ -22,6 +22,6 @@ class ServiceOrder(Base):
     completion_date = Column(DateTime)
     total_value = Column (Float, default=0.0)
  
-    vehicle = relationship("Vehicle", back_populates="service_orders")
-    mechanic = relationship("Mechanic", back_populates="service_orders")
-    items = relationship("ServiceItem", back_populates="service_order")
+    vehicle = relationship("Vehicle", back_populates="service_orders", lazy="select")
+    mechanic = relationship("Mechanic", back_populates="service_orders", lazy="select")
+    items = relationship("ServiceItem", back_populates="service_order", lazy="select")

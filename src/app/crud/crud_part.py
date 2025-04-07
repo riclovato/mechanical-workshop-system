@@ -5,6 +5,10 @@ from app.schemas.part import PartCreate, PartUpdate
 from typing import Optional, List
 
 class CRUDPart(CRUDBase[Part, PartCreate, PartUpdate]):
+    
+    def __init__(self):  
+        super().__init__(model=Part) 
+    
     def update_stock(self, db: Session, part_id: int, delta : int) -> Optional[Part]:
         """
         Atualiza o estoque de uma peça

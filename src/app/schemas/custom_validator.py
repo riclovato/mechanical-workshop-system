@@ -2,6 +2,7 @@ from typing import Optional
 import re
 import email_validator
 import phonenumbers
+from phonenumbers import PhoneNumberFormat, NumberParseException
 
 def validate_email(email: str) -> bool:
     """
@@ -53,24 +54,46 @@ def validate_cpf(cpf: str) -> bool:
     
     return cpf.endswith(f"{first_check_digit}{second_check_digit}")
 
+
 def validate_phone(phone: str, country_code: str = 'BR') -> Optional[str]:
-    """
-    Validate phone number using phonenumbers library
-    
-    Args:
-        phone (str): Phone number to validate
-        country_code (str, optional): Country code. Defaults to 'BR' (Brazil)
-    
-    Returns:
-        Optional[str]: Formatted phone number if valid, None otherwise
-    """
+    cleaned_phone = phone.strip()
+   
     try:
-        parsed_phone = phonenumbers.parse(phone, country_code)
-        if phonenumbers.is_valid_number(parsed_phone):
-            return phonenumbers.format_number(parsed_phone, phonenumbers.PhoneNumberFormat.E164)
-        return None
-    except phonenumbers.phonenumberutil.NumberParseException:
-        return None
+        parsed = phonenumbers.parse(cleaned_phone, country_code)
+        if phonenumbers.is_valid_number(parsed):
+            return phonenumbers.format_number(parsed, PhoneNumberFormat.E164)
+    except NumberParseException:
+        pass
+    
+    # Regex patterns for specific cases
+    patterns = [
+        r"^\+55\s?\(?(0?\d{2})\)?\s?\d{4,5}[-\s]?\d{4}$",  # Allow +55 (0XX) ... (takes zero in local context)
+        r"^0?(\d{2})[-\s]?\d{4,5}[-\s]?\d{4}$",            # Local format with or without zero (ex: 06197682752)
+        r"^0500[\s-]?\d{3}[\s-]?\d{4}$",                   # 0500 numbers (ex: 0500 642 6473)
+        r"^\+\d{1,3}\s?\d{1,4}\s?\d{4,10}$"               # Geral International Format
+    ]
+    
+    for pattern in patterns:
+        if re.match(pattern, cleaned_phone, re.IGNORECASE):
+            digits = re.sub(r"\D", "", cleaned_phone)  # Remove non-digits
+            
+            # Case 1: International Numbers (ex: +55 61 9768 2752)
+            if cleaned_phone.startswith("+"):
+                return f"+{digits.lstrip('+')}"
+            
+            # Case 2: Local Numbers with 0 (ex: (061) 9768-2752 → +556197682752)
+            if digits.startswith("0") and len(digits) in (10, 11):
+                return f"+55{digits[1:]}"
+            
+            # Case 3: 0500 Numbers (ex: 0500 642 6473 → +5505006426473)
+            if digits.startswith("0500"):
+                return f"+55{digits}"
+            
+            # Default: Add Brazil code
+            return f"+55{digits}"
+    
+    return None
+
 
 def validate_license_plate(plate: str) -> bool:
     """

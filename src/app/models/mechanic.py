@@ -11,4 +11,4 @@ class Mechanic(Base):
     phone = Column(String, nullable=False)
     available = Column(Boolean, default=True)
 
-    service_orders = relationship("ServiceOrder", back_populates="mechanic")
+    service_orders = relationship("ServiceOrder", back_populates="mechanic", lazy="select")

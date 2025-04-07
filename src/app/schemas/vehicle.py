@@ -1,70 +1,58 @@
 from __future__ import annotations
-from pydantic import BaseModel, field_validator, ConfigDict
-from typing import Optional,List, TYPE_CHECKING
+from pydantic import field_validator,ConfigDict  
+from .base import BaseSchema
+from typing import List
 from .custom_validator import validate_license_plate
 
-from .customer import CustomerBase  
-from .service_order import ServiceOrderBase
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .customer import CustomerSimple
+    from .service_order import ServiceOrderSimple
 
-class VehicleBase(BaseModel):
-    
+class VehicleBase(BaseSchema):
     id: int
     license_plate: str
     brand: str
     model: str
     year: int
     customer_id: int
-    
+
     @field_validator("license_plate")
     def license_plate_validator_field(cls, value: str) -> str:
         if not validate_license_plate(value):
             raise ValueError("Placa Inválida.")
         return value
 
-    model_config = ConfigDict(from_attributes=True)
-
-
-class VehicleCreate(BaseModel):
-   
+class VehicleCreate(BaseSchema):
     license_plate: str
-    brand: Optional[str] = None
+    brand: str | None = None
     model: str
-    year: Optional[int] = None
+    year: int | None = None
     customer_id: int
 
-class VehicleUpdate(BaseModel):
-   
-    license_plate: Optional[str] = None
-    brand: Optional[str] = None
-    model: Optional[str] = None
-    year: Optional[int] = None
-    customer_id: Optional[int] = None
+class VehicleUpdate(BaseSchema):
+    license_plate: str | None = None
+    brand: str | None = None
+    model: str | None = None
+    year: int | None = None
+    customer_id: int | None = None
+
+class VehicleSimple(BaseSchema):
+    id: int
+    license_plate: str
+    brand: str 
+    model: str 
+ 
 
 class VehicleResponse(VehicleBase):
-    owner: "CustomerBase"
-    service_orders: List["ServiceOrderBase"]
+    owner: "CustomerSimple"
+    service_orders: List["ServiceOrderSimple"] = []
+    
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+         json_schema_extra={
+            "exclude": {"owner": {"vehicles"}}
+        }
+    )
 
-    class Config:
-        from_attributes = True 
-
-if __name__ == "__main__":
-    # Dados para criação de um Vehicle
-    vehicle_data = {
-        "license_plate": "ABC-1234",
-        "model": "Corolla",
-        "customer_id": 1
-    }
-
-    # Criando um objeto VehicleCreate
-    vehicle_create = VehicleCreate(**vehicle_data)
-    print("VehicleCreate:", vehicle_create)
-
-    # Dados para atualização de um Vehicle
-    update_data = {
-        "license_plate": "XYZ-5678",
-        "year": 2021
-    }
-
-    # Criando um objeto VehicleUpdate
-    vehicle_update = VehicleUpdate(**update_data)
-    print("VehicleUpdate:", vehicle_update)

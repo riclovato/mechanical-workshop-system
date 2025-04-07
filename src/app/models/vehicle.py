@@ -12,6 +12,7 @@ class Vehicle(Base):
     year = Column(Integer, nullable=False)
     customer_id = Column(Integer, ForeignKey("customers.id"))
 
-    owner =  relationship("Customer", back_populates="vehicles")
-    service_orders = relationship("ServiceOrder", back_populates="vehicle")
+    owner =  relationship("Customer", back_populates="vehicles", lazy="select")
+    service_orders = relationship("ServiceOrder", back_populates="vehicle", lazy="select")
+    
 

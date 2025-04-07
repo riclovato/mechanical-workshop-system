@@ -6,5 +6,9 @@ from typing import List
 
 class CRUDMechanic(CRUDBase[Mechanic, MechanicCreate, MechanicUpdate]):
 
+    def __init__(self):  
+        super().__init__(model=Mechanic) 
+
+
     def get_available(self, db: Session) -> List[Mechanic]:
         return db.query(Mechanic).filter(Mechanic.available == True).all()
