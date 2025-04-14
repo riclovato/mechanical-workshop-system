@@ -6,6 +6,8 @@ from app.api.v1.endpoints.customer import router as customer_router
 from app.api.v1.endpoints.vehicle import router as vehicle_router
 from app.api.v1.endpoints.mechanic import router as mechanic_router
 from app.api.v1.endpoints.part import router as part_router
+from app.api.v1.endpoints.service_item import router as service_item_router
+from app.api.v1.endpoints.service_order import router as service_order_router
 from app.db.session import engine
 from app.db.base import Base
 
@@ -30,6 +32,8 @@ app.include_router(customer_router, prefix="/api/v1")
 app.include_router(vehicle_router, prefix="/api/v1")
 app.include_router(mechanic_router, prefix="/api/v1")
 app.include_router(part_router, prefix="/api/v1")
+app.include_router(service_item_router, prefix="/api/v1")
+app.include_router(service_order_router, prefix="/api/v1")
 
 #Cors
 app.add_middleware(
