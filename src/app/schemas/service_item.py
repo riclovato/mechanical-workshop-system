@@ -51,7 +51,9 @@ class ServiceItemResponse(ServiceItemBase):
     model_config = ConfigDict(from_attributes=True,
         populate_by_name=True,
         json_schema_extra={
-            "exclude": {"service_order": {"__all__": {"service_items"}},
-                        "part": {"__all__": {"service_items"}}}
+        "exclude": {
+            "service_order": {"__all__": ["service_items"]},
+            "part": {"__all__": ["service_items"]}
+        }
         })
 

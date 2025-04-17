@@ -46,8 +46,7 @@ class MechanicResponse(MechanicBase):
     model_config = ConfigDict(
         from_attributes=True,
         populate_by_name=True,
-        json_schema_extra={
-            "exclude": {"service_orders": {"__all__": {"mechanic"}}}
-        }
-   
+         json_schema_extra={
+        "exclude": {"service_orders": {"__all__": ["mechanic"]}} 
+    }
     )

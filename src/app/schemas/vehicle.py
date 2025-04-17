@@ -51,8 +51,8 @@ class VehicleResponse(VehicleBase):
     model_config = ConfigDict(
         from_attributes=True,
         populate_by_name=True,
-         json_schema_extra={
-            "exclude": {"owner": {"vehicles"}}
-        }
+          json_schema_extra={
+        "exclude": {"owner": ["vehicles"]}  
+    }
     )
 

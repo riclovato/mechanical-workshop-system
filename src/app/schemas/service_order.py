@@ -42,14 +42,14 @@ class ServiceOrderResponse(ServiceOrderBase):
     mechanic: "MechanicSimple"
     
     model_config = ConfigDict(
-        from_attributes=True,
-        populate_by_name=True,
-        json_schema_extra={
-            "exclude": {
-                "vehicle": {"service_orders", "owner"},
-                "mechanic": {"service_orders"}
-            }
-        }
-    )
+    from_attributes=True,
+    populate_by_name=True,
+    json_schema_extra={
+        "exclude": {
+            "vehicle": ["service_orders", "owner"],  
+            "mechanic": ["service_orders"]  
+    }
+    }
+)
 
 

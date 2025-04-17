@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.api.v1.api import router as v1_router
 from app.api.v1.endpoints.customer import router as customer_router
 from app.api.v1.endpoints.vehicle import router as vehicle_router
@@ -8,8 +9,10 @@ from app.api.v1.endpoints.mechanic import router as mechanic_router
 from app.api.v1.endpoints.part import router as part_router
 from app.api.v1.endpoints.service_item import router as service_item_router
 from app.api.v1.endpoints.service_order import router as service_order_router
+from app.api.v1.endpoints.auth import router as auth_router
 from app.db.session import engine
 from app.db.base import Base
+from app.api.v1.endpoints import auth
 
 #Configuração básica do logging
 logging.basicConfig(
@@ -34,6 +37,7 @@ app.include_router(mechanic_router, prefix="/api/v1")
 app.include_router(part_router, prefix="/api/v1")
 app.include_router(service_item_router, prefix="/api/v1")
 app.include_router(service_order_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1")
 
 #Cors
 app.add_middleware(

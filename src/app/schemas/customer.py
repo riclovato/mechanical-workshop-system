@@ -77,8 +77,8 @@ class CustomerResponse(CustomerBase):
     model_config = ConfigDict(
         from_attributes=True,
         populate_by_name=True,
-        json_schema_extra={
-            "exclude": {"vehicles": {"__all__": {"owner", "service_orders"}}}
-        }
+       json_schema_extra={
+        "exclude": {"vehicles": {"__all__": ["owner", "service_orders"]}} 
+    }
     )
 
